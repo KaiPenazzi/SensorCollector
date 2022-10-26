@@ -1,0 +1,21 @@
+Must
+-remove Button - done
+-MQTT Worker - testing
+-Save Data - testing
+-Main Page
+
+Add
+-add (username).json file
+
+delet
+-delete (username.json) file (maybe) or just store it
+
+Nice to have
+-icons
+-graphs
+...
+
+"name": "Zentrale",
+"username": "lt222221@ttn",
+"device_id": "eui-a84041c151822133",
+"password": "NNSXS.DGP7CETHDWPG62M5MB3RNEPB6D76SYONWLG3ISY.ZMSHEXXJSG2DTJIVXD7K4XX7POCOFI4IUTQGQR2BTTB3NRHZRSZQ"

@@ -1,0 +1,15 @@
+<script src="/js/deviceEdit.js"></script>
+<form action="/devices/" method="get">
+    <div class="card">
+        <div class="card-header">
+            <input class="form-control" id="name" type="text" placeholder="Name" value="" required />
+        </div>
+        <div class="card-body">
+            <input class="form-control" id="username" type="text" placeholder="username"  value="" readonly required />
+            <input class="form-control" id="device_id" type="text" placeholder="device id" value="" required />
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-success" onclick="buttonOnClick()" type="submit">Send</button>
+        </div>
+    </div>
+</form>
