@@ -6,7 +6,14 @@ function home(res) {
             console.log(err)
         }
 
-        devices = JSON.parse(file)
+        try {
+            devices = JSON.parse(file)
+        } catch (ex) {
+            console.log(ex)
+            waitPage(res)
+            return
+        }
+
         text = "<script type=\"text/javascript\">window.setTimeout(() => { document.location.reload(true); }, 15000);</script>"
         text += "<table class=\"table\"><tbody>"
 
@@ -17,7 +24,14 @@ function home(res) {
                     console.log(err)
                 }
 
-                data = JSON.parse(datafile)
+                try {
+                    data = JSON.parse(datafile)
+                } catch (ex) {
+                    console.log(ex)
+                    waitPage(res)
+                    return
+                }
+
                 try {
                     text += "<tr><td><div class=\"card\"><div class=\"card-header\"><h6><a href=\"/devices/data/" + device.username + "\">" + device.name + " | " + new Date(data[data.length - 1].received_at).toLocaleString('de') + "<a></h6></div>"
                     text += "<div class=\"card-body\">"
@@ -64,6 +78,11 @@ function finishPage(text, res) {
         res.write(test)
         res.end()
     })
+}
+
+function waitPage(res) {
+    text = "<div id=\"text\"></div><script src=\"/js/waitPage.js\"></script>"
+    finishPage(text, res)
 }
 
 module.exports = { home }
