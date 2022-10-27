@@ -10,7 +10,7 @@ function buttonOnClick() {
     })
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "192.168.2.138:3000/device/edit")
+    xhr.open("POST", document.URL)
     var text = JSON.stringify(obj)
     xhr.send(JSON.stringify(obj))
     xhr.onreadystatechange = () => {

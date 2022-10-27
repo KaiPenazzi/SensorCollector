@@ -95,14 +95,22 @@ const requestListener = function (req, res) {
 
 const server = http.createServer(requestListener)
 
-server.listen(3000, '192.168.2.138', () => {
+server.listen(3000, 'localhost', () => {
     console.log('Server running')
 })
 
 //start mqtt at beginning
+if (!fs.existsSync('./data/deviceData')) {
+    fs.mkdirSync('./data/deviceData', {recursive: true})
+    fs.writeFile('./data/devices.json', '[]',() => {
+        console.log("devices.json file is created")
+    })
+}
+
 fs.readFile('data/devices.json', (err, file) => {
     if (err) {
         console.log(err)
+        return
     }
 
     var devices = JSON.parse(file)
