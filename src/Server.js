@@ -95,7 +95,7 @@ const requestListener = function (req, res) {
 
 const server = http.createServer(requestListener)
 
-server.listen(3000, 'localhost', () => {
+server.listen(3000, '192.168.2.138', () => {
     console.log('Server running')
 })
 
