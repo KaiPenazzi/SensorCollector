@@ -261,9 +261,13 @@ function deviceUp(res, id) {
             for (let i = 0; i < devices.length; i++) {
                 if (i == id - 1) {
                     out_obj.push(obj)
+                    out_obj.push(devices[i])
+                    i++
                 }
-                out_obj.push(devices[i])
-                i++
+                else {
+                    out_obj.push(devices[i])
+                }
+                
             }
         }
 
