@@ -76,6 +76,12 @@ const requestListener = function (req, res) {
                     case 'edit':
                         Devices.editPost(res, req)
                         break
+                    case 'up':
+                        Devices.deviceUp(res, pathParts[3])
+                        break
+                    case 'down':
+                        Devices.deviceDown(res, pathParts[3])
+                        break
                 }
                 break;
         }
@@ -95,7 +101,7 @@ const requestListener = function (req, res) {
 
 const server = http.createServer(requestListener)
 
-server.listen(3000, '192.168.2.138', () => {
+server.listen(3000, 'localhost', () => {
     console.log('Server running')
 })
 

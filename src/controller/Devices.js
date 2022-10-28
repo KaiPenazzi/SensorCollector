@@ -19,10 +19,14 @@ function Default(res) {
         devices.forEach(device => {
             text += "<tr><td><div class=\"card\"><div class=\"card-header\">" + device.name + "</div><div class=\"card-body\"><li>" + device.username + "</li><li>" + device.device_id + "</li></div></div></td><td>"
             text += "<button class=\"btn btn-danger removeBtn\" id=\"" + count + "\" onclick=\"rmBtnClick(this)\">Remove</button>"
-            text += "<button class=\"btn btn-primary\" id=\"" + count + "\" type=\"button\" onclick=\"editClick(this)\">Edit</button></td></tr>"
+            text += "<button class=\"btn btn-primary\" id=\"" + count + "\" type=\"button\" onclick=\"editClick(this)\">Edit</button>"
+            text += "<button class=\"btn btn-light\" id=\"" + count + "\" type=\"button\" onclick=\"upClick(this)\">up</button>"
+            text += "<button class=\"btn btn-light\" id=\"" + count + "\" type=\"button\" onclick=\"downClick(this)\">down</button>"
+            text += "</td></tr>"
             count++
         });
         text += "</tbody></table>"
+        text += "<script src=\"/js/devices.js\"></script>"
 
         finishPage(text, res)
     })
@@ -211,7 +215,7 @@ function editPost(res, req) {
             }
 
             devices = JSON.parse(fileData)
-            
+
             for (let i = 0; i < devices.length; i++) {
                 if (devices[i].username == obj.username) {
                     var psw = device.password;
@@ -228,4 +232,99 @@ function editPost(res, req) {
     })
 }
 
-module.exports = { Default, Add, AddPost, DeleteDevice, getDevice, getDeviceData, deviceEdit, editPost }
+function deviceUp(res, id) {
+    fs.readFile('data/devices.json', (err, file) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+        var devices
+        try {
+            devices = JSON.parse(file)
+        } catch (ex) {
+            console.log(ex)
+            waitPage(res)
+            return
+        }
+
+        var out_obj = []
+
+        if (0 == id) {
+            var obj = devices[id]
+
+            for (let i = 1; i < devices.length; i++) {
+                out_obj.push(devices[i])
+            }
+            out_obj.push(obj)
+        } else {
+            var obj = devices[id]
+            for (let i = 0; i < devices.length; i++) {
+                if (i == id - 1) {
+                    out_obj.push(obj)
+                }
+                out_obj.push(devices[i])
+                i++
+            }
+        }
+
+        fs.writeFile('data/devices.json', JSON.stringify(out_obj, null, '\t'), () => {
+            res.writeHead(200)
+            res.end()
+        })
+    })
+}
+
+function deviceDown(res, id) {
+    fs.readFile('data/devices.json', (err, file) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+
+        var devices
+
+        try {
+            devices = JSON.parse(file)
+        } catch (ex) {
+            console.log(ex)
+            waitPage(res)
+            return
+        }
+
+        var out_obj = []
+
+        if (id == devices.length - 1) {
+            out_obj.push(devices[id])
+
+            for (let i = 0; i < devices.length - 1; i++) {
+                out_obj.push(devices[i])
+            }
+        } else {
+            var obj = devices[id]
+
+            for (let i = 0; i < devices.length; i++) {
+                if (i == id) {
+                    out_obj.push(devices[i + 1])
+                    out_obj.push(obj)
+                    i++
+                }
+                else {
+                    out_obj.push(devices[i])
+                }
+
+            }
+        }
+
+        fs.writeFile('data/devices.json', JSON.stringify(out_obj, null, '\t'), () => {
+            res.writeHead(200)
+            res.end()
+        })
+    })
+}
+
+function waitPage(res) {
+    text = "<div id=\"text\"></div><script src=\"/js/waitPage.js\"></script>"
+    finishPage(text, res)
+}
+
+module.exports = { Default, Add, AddPost, DeleteDevice, getDevice, getDeviceData, deviceEdit, editPost, deviceUp, deviceDown }
