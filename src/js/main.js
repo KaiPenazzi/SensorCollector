@@ -4,7 +4,7 @@ function addClick() {
 
 function rmBtnClick(id) {
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "remove/" + id.attributes["id"].value)
+    xhr.open("DELETE", "devices/" + id.attributes["id"].value)
     xhr.send()
     window.open("/devices", "_self")
 }

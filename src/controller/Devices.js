@@ -77,11 +77,13 @@ function AddPost(res, req) {
 
         mqttBroker.mqttWorker(obj)
 
-        fs.writeFile('data/deviceData/' + obj.username + '.json', '[]', (err) => {
-            if (err) {
-                console.log('add(post): ' + err)
-            }
-        })
+        if (!fs.existsSync) {
+            fs.writeFile('data/deviceData/' + obj.username + '.json', '[]', (err) => {
+                if (err) {
+                    console.log('add(post): ' + err)
+                }
+            })
+        }
 
         fs.readFile("data/devices.json", (err, fileData) => {
             if (err) {
@@ -99,16 +101,21 @@ function AddPost(res, req) {
     })
 }
 
-function DeleteDevice(res, req, device) {
+function DeleteDevice(res, device) {
     fs.readFile("data/devices.json", (err, file) => {
         if (err) {
             console.log(err)
         }
 
         var devices = JSON.parse(file);
-        devices.splice(device)
+        var edit_devices = []
+        for (let i = 0; i < devices.length; i++) {
+            if (i != device) {
+                edit_devices.push(devices[i])
+            }
+        }
 
-        fs.writeFile("data/devices.json", JSON.stringify(devices, null, '\t'), () => {
+        fs.writeFile("data/devices.json", JSON.stringify(edit_devices, null, '\t'), () => {
             res.writeHead(200)
             res.end()
         })
@@ -267,7 +274,7 @@ function deviceUp(res, id) {
                 else {
                     out_obj.push(devices[i])
                 }
-                
+
             }
         }
 

@@ -89,8 +89,8 @@ const requestListener = function (req, res) {
         //method delete
         switch (pathParts[1]) {
             case "devices":
-                var device = pathParts[3];
-                Devices.DeleteDevice(res, req, device)
+                var device = pathParts[2];
+                Devices.DeleteDevice(res, device)
                 break;
 
             default:
