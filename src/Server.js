@@ -103,6 +103,7 @@ const server = http.createServer(requestListener)
 
 server.listen(3000, '192.168.2.138', () => {
     console.log('Server running')
+    console.log('Server is listening on ip: 192.168.2.138:3000')
 })
 
 //start mqtt at beginning
