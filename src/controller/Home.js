@@ -27,7 +27,7 @@ function home(res) {
                 try {
                     data = JSON.parse(datafile)
                 } catch (ex) {
-                    console.log(ex)
+                    console.log(ex + "\n" + device.username)
                     waitPage(res)
                     return
                 }

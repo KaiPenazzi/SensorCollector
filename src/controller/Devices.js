@@ -1,6 +1,60 @@
 const fs = require('fs')
 const mqttBroker = require('./mqttBroker')
 
+function DevicesController(req, res) {
+    path = req.url
+    pathParts = path.split('/')
+
+    switch (req.method) {
+        case "GET":
+            switch (pathParts[2]) {
+                case "add":
+                    //add device page
+                    Add(res)
+                    break;
+
+                case "edit":
+                    deviceEdit(res, pathParts[3])
+                    break;
+
+                case "data":
+                    getDevice(res, pathParts[3])
+                    break;
+
+                default:
+                    //default devices
+                    Default(res)
+                    break;
+            }
+            break;
+
+        case "POST":
+            switch (pathParts[2]) {
+                case 'add':
+                    AddPost(res, req)
+                    break
+
+                case 'edit':
+                    editPost(res, req)
+                    break
+                case 'up':
+                    deviceUp(res, pathParts[3])
+                    break
+                case 'down':
+                    deviceDown(res, pathParts[3])
+                    break
+            }
+            break;
+        case "DELETE":
+            var device = pathParts[2];
+            DeleteDevice(res, device)
+            break;
+
+        default:
+            break;
+    }
+}
+
 function Default(res) {
     res.writeHead(200, {
         'content-type': 'Text/html'
@@ -133,45 +187,6 @@ function getDevice(res, text) {
     })
 }
 
-function getDeviceData(res, text) {
-    fs.readFile('./data/deviceData/' + text + '.json', (err, file) => {
-        if (err) {
-            console.log(err)
-        }
-
-        obj = JSON.parse(file)
-
-        var jsonString = JSON.stringify(obj[0].uplink_message.decoded_payload, ' ', ' ')
-        var parts = jsonString.split(' ')
-        var vars = []
-        for (let i = 1; i < parts.length; i += 2) {
-            vars.push(parts[i].replace(/\W/g, ''))
-        }
-
-        var senddata = []
-
-        vars.forEach(variable => {
-            var data = {
-                title: variable,
-                graphdata: []
-            }
-
-            obj.forEach(element => {
-                //var date = new Date(element.received_at)
-
-                data.graphdata.push({
-                    x: element.received_at,
-                    y: element.uplink_message.decoded_payload[variable]
-                })
-            });
-
-            senddata.push(data)
-        });
-
-        res.writeHead(200)
-        res.end(JSON.stringify(senddata))
-    })
-}
 
 function deviceEdit(res, deviceInt) {
     deviceInt = Number(deviceInt)
@@ -338,4 +353,4 @@ function waitPage(res) {
     finishPage(text, res)
 }
 
-module.exports = { Default, Add, AddPost, DeleteDevice, getDevice, getDeviceData, deviceEdit, editPost, deviceUp, deviceDown }
+module.exports = { DevicesController }
